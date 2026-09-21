@@ -229,8 +229,8 @@ do
   --  Use CTRL+<hjkl> to switch between windows
   --
   --  See `:help wincmd` for a list of all window commands
-  vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-  vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+  -- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+  -- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
   vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
   vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
@@ -558,6 +558,7 @@ do
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
+  vim.keymap.set('n', '<leader>st', '<Esc><cmd>TodoTelescope<CR>', { desc = '[S]earch [T]odos' })
   vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
   vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
   vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -746,6 +747,7 @@ do
     -- gopls = {},
     -- pyright = {},
     -- tsc = {},
+    jdtls = {}, -- Java language server
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
     --    https://github.com/mrcjkb/rustaceanvim
@@ -837,6 +839,7 @@ do
       local enabled_filetypes = {
         -- lua = true,
         -- python = true,
+        java = true,
       }
       if enabled_filetypes[vim.bo[bufnr].filetype] then
         return { timeout_ms = 500 }
@@ -1046,19 +1049,17 @@ end
 
 -- SECTION 11 - Rob's added plugins
 do
+  vim.pack.add { gh 'gbprod/substitute.nvim' }
+  require('substitute').setup {
+    highlight_substituted_text = {
+      enabled = false,
+    },
+  }
 
-    vim.pack.add { gh 'gbprod/substitute.nvim' }
-    require('substitute').setup {
-      highlight_substituted_text = {
-        enabled = false,
-      };
-    }
-
-    vim.keymap.set('n', 's', require('substitute').operator, { noremap = true })
-    vim.keymap.set('n', 'ss', require('substitute').line, { noremap = true })
-    vim.keymap.set('n', 'S', require('substitute').eol, { noremap = true })
-    vim.keymap.set('x', 's', require('substitute').visual, { noremap = true })
-
+  vim.keymap.set('n', 's', require('substitute').operator, { noremap = true })
+  vim.keymap.set('n', 'ss', require('substitute').line, { noremap = true })
+  vim.keymap.set('n', 'S', require('substitute').eol, { noremap = true })
+  vim.keymap.set('x', 's', require('substitute').visual, { noremap = true })
 end
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
